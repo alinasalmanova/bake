@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Badge {
+  hit
+  new
+}
+
+model Category {
+  id    String   @id @default(cuid())
+  title String
+  slug  String  @unique
+
+  products Product[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  title       String
+  composition String
+  price       Int
+  weight      String?
+  image       String
+  badge       Badge?
+  categoryId  String
+
+  category Category @relation(fields: [categoryId], references: [id])
+}
